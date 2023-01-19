@@ -28,6 +28,18 @@ const consume = async (stream: ReadableStream) => {
     let tmpBuffer = ''
     let companyBuffer= ''
     let personBuffer = ''
+
+    const selectorList = [
+      '._chinaz-seo-newtc > div > span.mr50:first-child > i.color-63',
+      '._chinaz-seo-newtc > div > span.mr50:nth-child(2) > a > i.color-63',
+      '._chinaz-seo-newtc > div > span:nth-child(1) > a > .color-63',
+      '._chinaz-seo-newtc > span.mr50 > i.color-2f87c1 > a',
+      '._chinaz-seo-newtc > span#company > i ',
+      '._chinaz-seo-newtc > span#company > i > a ',
+      '._chinaz-seo-newtc > span.mr50:nth-child(3) > i.color-63',
+      '._chinaz-seo-newtc > span:nth-child(4) > i.color-63',
+      '._chinaz-seo-newinfo > div.pb5 > span.mr50 > i > a'
+    ]
   
     const transfomer = new HTMLRewriter()
 

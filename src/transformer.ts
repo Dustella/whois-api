@@ -17,6 +17,7 @@ const consume = async (stream: ReadableStream) => {
       whois:{
         code:'',
         name:'',
+        company:"",
         type:'',
         time:''
       },
@@ -25,10 +26,12 @@ const consume = async (stream: ReadableStream) => {
       },
     }
     let tmpBuffer = ''
+    let companyBuffer= ''
+    let personBuffer = ''
   
     const transfomer = new HTMLRewriter()
 
-      .on('._chinaz-seo-newtc > div > span > .color-63', {
+      .on('._chinaz-seo-newtc > div > span.mr50:first-child > i.color-63', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
@@ -39,7 +42,7 @@ const consume = async (stream: ReadableStream) => {
         },
       })
 
-      .on('._chinaz-seo-newtc > div > span.mr50 > a > .color-63', {
+      .on('._chinaz-seo-newtc > div > span.mr50:nth-child(2) > a > i.color-63', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
@@ -50,7 +53,7 @@ const consume = async (stream: ReadableStream) => {
         },
       })
 
-      .on('._chinaz-seo-newtc > div > span > a > .color-63', {
+      .on('._chinaz-seo-newtc > div > span:nth-child(1) > a > .color-63', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
@@ -60,7 +63,7 @@ const consume = async (stream: ReadableStream) => {
           }
         },
       })
-      .on('._chinaz-seo-newtc > span.mr50 > i > a', {
+      .on('._chinaz-seo-newtc > span.mr50 > i.color-2f87c1 > a', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
@@ -70,17 +73,30 @@ const consume = async (stream: ReadableStream) => {
           }
         },
       })
+
       .on('._chinaz-seo-newtc > span#company > i ', {
         text(text) {
-          tmpBuffer += text.text.trim()
+          personBuffer += text.text
           if (text.lastInTextNode) {
-              result.whois.name = (tmpBuffer.trim().substring(0,tmpBuffer.indexOf('\r')))
-              console.log(tmpBuffer)
-            tmpBuffer = ''
+            console.log(text.text)
+            result.whois.name = (personBuffer.trim())
+  
+            personBuffer = ''
           }
         },
-      })
-      .on('._chinaz-seo-newtc > span.mr50 > i ', {
+      })      
+      .on('._chinaz-seo-newtc > span#company > i > a ', {
+        text(text) {
+          companyBuffer += text.text
+          if (text.lastInTextNode) {
+            console.log(text.text)
+            result.whois.company = (companyBuffer.trim())
+  
+            companyBuffer = ''
+          }
+        },
+      })  
+      .on('._chinaz-seo-newtc > span.mr50:nth-child(3) > i.color-63 ', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
@@ -90,7 +106,7 @@ const consume = async (stream: ReadableStream) => {
           }
         },
       })
-      .on('._chinaz-seo-newtc > span > i ', {
+      .on('._chinaz-seo-newtc > span:nth-child(4) > i.color-63 ', {
         text(text) {
           tmpBuffer += text.text
           if (text.lastInTextNode) {
